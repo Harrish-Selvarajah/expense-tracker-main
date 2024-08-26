@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/db36ccf2-8947-47e8-bf96-6c3c670811cb/resourceGroups/resourceGroup1/providers/Microsoft.Web/sites/expenseTracker-test",
+  "appService.deploySubpath": "."
+}
