@@ -17,16 +17,18 @@ def process_sms(sms_message, bank, date_time, sheet_name):
         if bank == 'hnb':
             extracted_data = []
 
-            details = hnb_sms_processor.process_common_pattern(
-                sms_message, date_time, bank)
-            extracted_data.append(details)
-
-            df = pd.DataFrame(extracted_data)
-
             # Load the existing data to find the next available row
             existing_data = get_as_dataframe(
                 sheet, evaluate_formulas=True, skipinitialspace=False)
             next_row = len(existing_data) + 2
+
+            details = hnb_sms_processor.process_common_pattern(
+                sms_message, date_time, bank)
+
+            # Append the details to the extracted_data list
+            extracted_data.append(details)
+
+            df = pd.DataFrame(extracted_data)
 
             # Append the DataFrame to the next available row
             set_with_dataframe(sheet, df, row=next_row,

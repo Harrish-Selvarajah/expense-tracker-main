@@ -38,7 +38,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "expense",
                 "transactionType": "card_internet",
                 "date_time": date_time_str,
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 
             }
         # Debit card POS txn
@@ -55,7 +56,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "expense",
                 "transactionType": "card_pos",
                 "date_time": date_time_str,
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         # ATM Withdrawal
         elif match3:
@@ -71,7 +73,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "expense",
                 "transactionType": "atm_withdrawal",
                 "date_time": date_time_str,
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         # Credited/debited txn
         elif match4:
@@ -99,7 +102,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "income" if action == "credited" else "expense",
                 "transactionType": transaction_type,
                 "date_time": date_time_str,
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         # Credit card txn
         elif match5:
@@ -114,7 +118,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "expense",
                 "transactionType": "credit_card",
                 "date_time": date_time_str,
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         else:
             return {
@@ -127,7 +132,8 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "flow": "NO_MATCH",
                 "transactionType": "NO_MATCH",
                 "date_time": "NO_MATCH",
-                "sms_message": sms_message
+                "sms_message": sms_message,
+                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
 
     except Exception as e:
@@ -143,6 +149,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
             "transactionType": "NO_MATCH",
             "date_time": "NO_MATCH",
             "sms_message": sms_message,
+            "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             # Optionally include the error message for debugging
             "error": str(e)
         }
