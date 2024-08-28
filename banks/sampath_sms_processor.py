@@ -1,9 +1,15 @@
 import re
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 def process_common_pattern(sms_message: str, date_time: str, bank: str):
     try:
+        # Set the timezone to Sri Lanka
+        sri_lanka_tz = ZoneInfo('Asia/Colombo')
+        added_timestamp = datetime.now(
+            sri_lanka_tz).strftime("%Y-%m-%d %H:%M:%S")
+
         # Patterns for different Sampath SMS formats
         # Debit card internet txn
         internet_txn_pattern = r"([A-Z]{3})\s([\d,]+\.\d{2})\s(debited|credited)\s(?:to|from)\sAC\s\*\*(\d{4})\sfor\s((?:eCom|eCom/REV)[^\s]*)\s([A-Z]+\s[A-Z]+\s\d+|[A-Z]+\s\d+|[A-Z]+)"
@@ -38,7 +44,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": "card_internet",
                 "date_time":  date_time,
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
         # Debit card POS txn
         elif match2:
@@ -55,7 +61,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": "card_pos",
                 "date_time": date_time,
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
         # ATM Withdrawal
         elif match3:
@@ -72,7 +78,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": "atm_withdrawal",
                 "date_time": date_time,
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
         # Credited/debited txn
         elif match4:
@@ -89,7 +95,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": 'bank_transfer',
                 "date_time": date_time,
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
         # Credit card txn/ web card txn
         elif match5:
@@ -105,7 +111,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": "credit_card",
                 "date_time": date,
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
         else:
             return {
@@ -119,7 +125,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
                 "transactionType": "NO_MATCH",
                 "date_time": "NO_MATCH",
                 "sms_message": sms_message,
-                "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "added_timestamp": added_timestamp
             }
 
     except Exception as e:
@@ -135,7 +141,7 @@ def process_common_pattern(sms_message: str, date_time: str, bank: str):
             "transactionType": "NO_MATCH",
             "date_time": "NO_MATCH",
             "sms_message": sms_message,
-            "added_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "added_timestamp": added_timestamp,
             # Optionally include the error message for debugging
             "error": str(e)
         }
